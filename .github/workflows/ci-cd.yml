@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
 
 jobs:
   build-and-push:
@@ -27,15 +26,14 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ./backend/docker-compose
+          file: ./backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/protrackr-backend:latest
 
-      # Optional - if you have a frontend service
-      # - name: Build and push frontend image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: ./frontend
-      #     file: ./frontend/Dockerfile
-      #     push: true
-      #     tags: ${{ secrets.DOCKER_USERNAME }}/protrackr-frontend:latest
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/protrackr-frontend:latest
