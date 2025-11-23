@@ -1,0 +1,44 @@
+services:
+  app:
+    build:
+      context: ./backend       # path to backend project
+      dockerfile: Dockerfile   # file inside backend/
+    container_name: protrackr-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
+      - mailhog
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/protrackr
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_REDIS_HOST: redis
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: protrackr
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+
+volumes:
+  pgdata:
