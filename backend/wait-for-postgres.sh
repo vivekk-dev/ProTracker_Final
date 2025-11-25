@@ -5,10 +5,12 @@ host="$1"
 shift
 cmd="$@"
 
+echo "Checking Postgres at $host..."
+
 until pg_isready -h "$host" -U "postgres"; do
-  >&2 echo "Postgres is unavailable - sleeping"
+  echo "Postgres is unavailable - sleeping"
   sleep 2
 done
 
->&2 echo "Postgres is up - executing command"
+echo "Postgres is up - starting application"
 exec $cmd
