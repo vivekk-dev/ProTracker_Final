@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/protrackr
+    url: jdbc:postgresql://postgres:5432/protrackr
     username: postgres
     password: admin
     driver-class-name: org.postgresql.Driver
