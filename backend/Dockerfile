@@ -8,4 +8,7 @@ COPY target/*.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY wait-for-postgres.sh /app/wait-for-postgres.sh
+RUN chmod +x /app/wait-for-postgres.sh
+
+ENTRYPOINT ["/app/wait-for-postgres.sh", "postgres", "java", "-jar", "app.jar"]
